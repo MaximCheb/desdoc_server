@@ -1,5 +1,8 @@
 package com.doc.des.server.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.doc.des.server.entity.ProjectInvolveEntity;
 import com.doc.des.server.entity.RolesEntity;
 
@@ -8,7 +11,7 @@ import lombok.Data;
 @Data
 public class ProjectInvolveModel {
 	private long id;
-	private ShortUserModel user;
+	private long userId;
 	private String ProjectName;
 	private String[] roleString;
 	

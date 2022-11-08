@@ -6,7 +6,6 @@ import com.doc.des.server.entity.ProjectInvolveEntity;
 import com.doc.des.server.entity.UserEntity;
 
 public class UserModel extends ShortUserModel{
-	private List<ProjectInvolveEntity> projectInvolved;
 	private String email;
 	private String phone;
 	private String imageUrl;
@@ -16,18 +15,9 @@ public class UserModel extends ShortUserModel{
 		model.setLogin(entity.getLogin());
 		model.setName(entity.getName());
 		model.setSurname(entity.getSurname());
-		model.setProjectInvolved(entity.getProjectInvolved());
 		model.setEmail(entity.getEmail());
 		model.setPhone(entity.getPhone());
 		return model;
-	}
-
-	public List<ProjectInvolveEntity> getProjectInvolved() {
-		return projectInvolved;
-	}
-
-	public void setProjectInvolved(List<ProjectInvolveEntity> projectInvolved) {
-		this.projectInvolved = projectInvolved;
 	}
 
 	public String getEmail() {
