@@ -16,18 +16,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "project_involve")
 public class ProjectInvolveEntity {
+    /*
+     * extra functionality for the MVP
+     */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	@ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-	private UserEntity user;
-	@Column(length=32, nullable=false, unique=false)
+	private long id; 
+	
+	private long userId;
+	@Column(length=32, nullable=true, unique=false)
 	private String refRole;
 	@ManyToOne
-    @JoinColumn(name="project_id", nullable=false)
+    @JoinColumn(name="project_id", nullable=true)
 	private ProjectEntity project;
-	@OneToMany(mappedBy="projectRole",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="projectRole",fetch=FetchType.LAZY)
     private List<RolesEntity > roles;
 	
 	public long getId() {
@@ -35,14 +37,14 @@ public class ProjectInvolveEntity {
 	}
 	public void setId(long id) {
 		this.id = id;
-	}
-	public UserEntity getUser() {
-		return user;
-	}
-	public void setUser(UserEntity user) {
-		this.user = user;
-	}
-	public ProjectEntity getProject() {
+	}	
+	public long getUserId() {
+        return userId;
+    }
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+    public ProjectEntity getProject() {
 		return project;
 	}
 	public void setProject(ProjectEntity project) {
