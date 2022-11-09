@@ -28,12 +28,12 @@ public class RolesService {
         return RolesModel.toModel(rolesRepository.findByPrivilegeId(privilage));        		
     }
     
-    public RolesModel getOne(int id) {
-        return RolesModel.toModel(rolesRepository.findById(id).get());
+    public RolesEntity getOne(int id) {
+        return rolesRepository.findById(id).get();
     }
     
-    public RolesModel getByProjectId(int id) {
-        return RolesModel.toModel(rolesRepository.findByProjectId(id));
+    public RolesEntity getByProjectId(int id) {
+        return rolesRepository.findByProjectId(id);
     }
         
     public void create(RolesEntity entity) throws AlreadyExistException {
