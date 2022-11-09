@@ -8,7 +8,7 @@ import com.doc.des.server.entity.ProjectInvolveEntity;
 
 public interface ProjectInvolveRepository extends CrudRepository<ProjectInvolveEntity, Long>{
 	ProjectInvolveEntity findById(long id);
-	ProjectInvolveEntity findByUserId(long id);
-	ProjectInvolveEntity findByProjectId(long id);
+	List<ProjectInvolveEntity> findAllByUserId(long id);
+	List<ProjectInvolveEntity> findAllByProjectId(long id);
 	List<ProjectInvolveEntity> findAll();
 }

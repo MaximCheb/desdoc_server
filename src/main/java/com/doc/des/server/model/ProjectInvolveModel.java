@@ -16,11 +16,13 @@ public class ProjectInvolveModel {
 	private String[] roleString;
 	
 	public static ProjectInvolveModel toModel(ProjectInvolveEntity entity) {
+	    List<String>roleNames = new ArrayList<String>();
 		ProjectInvolveModel model = new ProjectInvolveModel();
 		model.setId(entity.getId());
 		model.setProjectName(entity.getProject().getName());
-		model.setRoleString((String[]) entity.getRoles().stream().map(RolesEntity::getName).toArray());
-		model.setUser(UserModel.toModel(entity.getUser()));
+		entity.getRoles().forEach(role->roleNames.add(role.getPrivilege().getName()));
+		model.setRoleString((String[]) roleNames.toArray());
+		model.setUserId(entity.getUserId());
 		return model;
 	}
 }
