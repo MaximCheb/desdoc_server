@@ -33,9 +33,7 @@ public class UserEntity {
 	private String name;
 	@Column(length=64, nullable=false, unique=false)
 	private String surname;
-	@OneToMany(targetEntity=ProjectInvolveEntity.class,mappedBy="user",fetch=FetchType.EAGER)	 // внешний ключ
-	private List<ProjectInvolveEntity> project;
-	@OneToMany(targetEntity=ProjectInvolveEntity.class,mappedBy="user",fetch=FetchType.EAGER)	 // внешний ключ
+	@OneToMany(targetEntity=UserSubscriptionEntity.class,mappedBy="user",fetch=FetchType.LAZY)	 // внешний ключ
 	private List<UserSubscriptionEntity> subscription;
 	@Column(length=64, nullable=false, unique=false)
 	private String email;
@@ -94,12 +92,6 @@ public class UserEntity {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public List<ProjectInvolveEntity> getProjectInvolved() {
-		return project;
-	}
-	public void setProjectInvolved(List<ProjectInvolveEntity> project) {
-		this.project = project;
-	}	
 	public String getImageUrl() {
 		return imageUrl;
 	}
@@ -107,4 +99,11 @@ public class UserEntity {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+    public List<UserSubscriptionEntity> getSubscription() {
+        return subscription;
+    }
+    public void setSubscription(List<UserSubscriptionEntity> subscription) {
+        this.subscription = subscription;
+    }	
+	
 }

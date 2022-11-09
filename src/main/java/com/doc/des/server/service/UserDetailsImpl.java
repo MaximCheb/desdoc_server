@@ -2,9 +2,12 @@ package com.doc.des.server.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.doc.des.server.entity.ProjectInvolveEntity;
 import com.doc.des.server.entity.RolesEntity;
 import com.doc.des.server.entity.UserEntity;
+import com.doc.des.server.repository.ProjectInvolveRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements UserDetails {
+    
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -22,7 +27,7 @@ public class UserDetailsImpl implements UserDetails {
 	private String username;
 
 	private String email;
-
+	
 	@JsonIgnore
 	private String password;
 
@@ -38,12 +43,12 @@ public class UserDetailsImpl implements UserDetails {
 	}
 
 	public static UserDetailsImpl build(UserEntity user) {
-		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		for (ProjectInvolveEntity involve : user.getProjectInvolved()) {
-			authorities.add(new SimpleGrantedAuthority(involve.getRoleName()));
-			for(RolesEntity role : involve.getRoles()) {
-				authorities.add(new SimpleGrantedAuthority(role.getPrivilege().getName()));
-			}
+	    Set<String>privilages = new HashSet<String>();
+	    privilages.add("user"); // users role
+	    user.getSubscription().forEach(sub->privilages.add(sub.getRole())); 
+		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();		
+		for (var privilage : privilages) {
+			authorities.add(new SimpleGrantedAuthority(privilage.toString()));			
 		}
 		return new UserDetailsImpl(
 				user.getId(), 

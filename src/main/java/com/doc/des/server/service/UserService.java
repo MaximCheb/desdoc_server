@@ -19,10 +19,13 @@ import com.doc.des.server.entity.UserEntity;
 import com.doc.des.server.exception.AlreadyExistException;
 import com.doc.des.server.model.UserModel;
 import com.doc.des.server.repository.UserRepository;
+import com.doc.des.server.request.ChangeLoginRequest;
+import com.doc.des.server.security.JwtUtils;
 
 @Service
 public class UserService {
-	
+    @Autowired
+    private JwtUtils jwtUtils;
 	@Autowired
 	private UserRepository repository;
     
@@ -38,12 +41,25 @@ public class UserService {
         return UserModel.toModel(repository.findById(id).get());
     }
         
-    public UserModel createUser(UserEntity login) throws AlreadyExistException {
-    	if(repository.findByLogin(login.getLogin())!=null) {
+    public UserModel createUser(UserEntity loginUser) throws AlreadyExistException {
+    	if(repository.findByLogin(loginUser.getLogin())!=null) {
 			throw new AlreadyExistException("User exist");
 		}
-    	return UserModel.toModel(repository.save(login));
-    }   
+    	return UserModel.toModel(repository.save(loginUser));
+    }
+    
+    public void updateUser(UserEntity entity) {
+        var user = repository.findByLogin(entity.getLogin());
+        entity.setPassword(user.getPassword());
+        entity.setId(user.getId());
+        repository.save(entity);        
+    }
+    
+    public void updateLogin(ChangeLoginRequest logins) { // didnt test
+        var user = repository.findByLogin(logins.getOldLogin());
+        user.setLogin(logins.getNewLogin());
+        repository.save(user);        
+    }
     
 
 }

@@ -21,10 +21,11 @@ public class UserSubscriptionEntity {
 	private String type;
 	private Date is_continue;
 	@ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="user_id", nullable=true)
 	private UserEntity user;
-	private Date date_end;
-	private int idRef;
+	private Date date_end; // now date + sub time
+	private String role; // a role other than the user role
+	private int idRef; // subsctipton
 	public long getId() {
 		return id;
 	}
@@ -54,6 +55,18 @@ public class UserSubscriptionEntity {
 	}
 	public void setDate_end(Date date_end) {
 		this.date_end = date_end;
-	}	
-	
+	}
+    public int getIdRef() {
+        return idRef;
+    }
+    public void setIdRef(int idRef) {
+        this.idRef = idRef;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }	    
+    
 }

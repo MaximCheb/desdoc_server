@@ -1,5 +1,6 @@
 package com.doc.des.server.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +22,11 @@ import com.doc.des.server.service.RolesService;
 @RestController
 @RequestMapping("/roles")
 public class RolesController {
-	
+@Autowired	
 private RolesService rolesService;
 	
 	@GetMapping("/all")
-	@PreAuthorize("hasAuthority('change_project')")
+	@PreAuthorize("hasAuthority('user')")
 	public ResponseEntity getAll() {
 		try {
 			return ResponseEntity.ok("Server work");
@@ -35,7 +36,7 @@ private RolesService rolesService;
 	}
 	
 	@GetMapping()
-	@PreAuthorize("hasAuthority('change_project')")
+	
 	public ResponseEntity getOne(@RequestParam int id) {
 		try {
 			return ResponseEntity.ok(rolesService.getOne(id));
@@ -45,7 +46,7 @@ private RolesService rolesService;
 	}
 	
 	@GetMapping("/project")
-	@PreAuthorize("hasAuthority('change_project')")
+	
 	public ResponseEntity getByProject(@RequestParam int id) {
 		try {
 			return ResponseEntity.ok(rolesService.getByProjectId(id));
@@ -58,13 +59,14 @@ private RolesService rolesService;
     public ResponseEntity newProject(@RequestBody RolesEntity newProject) {
     	try {
     		rolesService.create(newProject);
-    		ResponseEntity.ok(newProject.getName()+" create");
+    		ResponseEntity.ok(newProject.getProjectId()+" create");
 		}catch(Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		return ResponseEntity.badRequest().body("bad role");
     }
 	@DeleteMapping()
+	@PreAuthorize("hasAuthority('user')")
 	public ResponseEntity delete(@RequestParam int id) {
 		try {
 			rolesService.delete(id);
@@ -74,6 +76,7 @@ private RolesService rolesService;
 		}
 	}
 	@PatchMapping()
+	@PreAuthorize("hasAuthority('user')")
 	public ResponseEntity update(@RequestBody RolesEntity project) {
 		try {
 			rolesService.update(project);

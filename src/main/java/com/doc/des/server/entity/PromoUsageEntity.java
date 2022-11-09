@@ -21,7 +21,7 @@ public class PromoUsageEntity {
     @JoinColumn(name="promo_id", nullable=false)
     private PromoEntity promo;
     private Long user_id;
-    private Date date;
+    private Date date; // date of start
      
     public Long getId() {
         return id;

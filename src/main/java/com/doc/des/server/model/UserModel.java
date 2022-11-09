@@ -16,7 +16,6 @@ public class UserModel extends ShortUserModel{
 		model.setLogin(entity.getLogin());
 		model.setName(entity.getName());
 		model.setSurname(entity.getSurname());
-		model.setProjectInvolved(entity.getProjectInvolved());
 		model.setEmail(entity.getEmail());
 		model.setPhone(entity.getPhone());
 		return model;

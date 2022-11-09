@@ -31,7 +31,7 @@ public class ProjectEntity {
 	private String type;
 	@Column(length=128, nullable=false, unique=false)
 	private String icon;
-	@Column(length=128, nullable=false, unique=false)
+	@Column(length=128, nullable=true, unique=false)
 	private String parent;
 	@OneToMany (cascade = CascadeType.ALL, mappedBy = "project",
 			fetch=FetchType.EAGER) // entity in Orders
