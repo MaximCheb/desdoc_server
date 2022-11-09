@@ -25,11 +25,11 @@ public class PromoEntity {
     private int numberUses;
     @ManyToOne
     @JoinColumn(name="subcription_id", nullable=false)
-    private SubcriptionType subcription;
+    private SubcriptionType subcription; // use subscription for ref
     private Date startPromo;
     private Date endPromo;
-    private boolean soleProme;
-    private boolean end;
+    private boolean solePromo; // if true?? dont use promo
+    private boolean end; 
     @OneToMany(targetEntity=PromoUsageEntity.class,mappedBy="promo",fetch=FetchType.EAGER)    // внешний ключ
     private List<PromoUsageEntity> promos;
     
@@ -70,10 +70,10 @@ public class PromoEntity {
         this.subcription = subType;
     }
     public boolean isSoleProme() {
-        return soleProme;
+        return solePromo;
     }
     public void setSoleProme(boolean soleProme) {
-        this.soleProme = soleProme;
+        this.solePromo = soleProme;
     }
     public boolean isEnd() {
         return end;
