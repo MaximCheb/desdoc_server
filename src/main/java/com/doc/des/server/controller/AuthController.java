@@ -1,5 +1,6 @@
 package com.doc.des.server.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,9 +31,9 @@ import com.doc.des.server.entity.RolesEntity;
 import com.doc.des.server.entity.UserEntity;
 import com.doc.des.server.exception.AlreadyExistException;
 import com.doc.des.server.model.UserModel;
+import com.doc.des.server.repository.ProjectInvolveRepository;
 import com.doc.des.server.repository.RolesRepository;
 import com.doc.des.server.repository.UserRepository;
-import com.doc.des.server.request.LoginRequest;
 import com.doc.des.server.request.*;
 import com.doc.des.server.security.JwtUtils;
 import com.doc.des.server.service.AuthService;
@@ -45,23 +48,19 @@ public class AuthController {
 	UserRepository userRepository;
 
 	@Autowired
-	RolesRepository roleRepository;
+	ProjectInvolveRepository involveRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
 
 	@Autowired
 	JwtUtils jwtUtils;
-	@GetMapping(path = "/signal")
-    public ResponseEntity getSignal() {
-		return ResponseEntity.ok("Bad signal");
-	}
-
+		
     @PostMapping(path = "/signin")
-    public ResponseEntity getAuthUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> getAuthUser(@Valid @RequestBody LoginRequest loginRequest) {
     	Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
-
+    	    
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
@@ -70,6 +69,7 @@ public class AuthController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
+		
         
         return ResponseEntity.ok(new JwtResponse(jwt, 
 				 userDetails.getId(), 
@@ -77,6 +77,32 @@ public class AuthController {
 				 userDetails.getEmail(), 
 				 roles));
     }
+    /*
+     * refresh token then change project
+     */
+    @PostMapping(path = "/refresh") 
+    public ResponseEntity<JwtResponse> refreshProject(@Valid @RequestBody ProjectRequest refreshRequest) {
+        List<GrantedAuthority> updatedAuthorities = new ArrayList<GrantedAuthority>();
+        getProjectRoles(refreshRequest).forEach(role->updatedAuthorities.add(new SimpleGrantedAuthority(role)));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(refreshRequest.getLogin(), refreshRequest.getPassword(),updatedAuthorities));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        
+        return ResponseEntity.ok(new JwtResponse(jwt, 
+                 userDetails.getId(), 
+                 userDetails.getUsername(), 
+                 userDetails.getEmail(), 
+                 roles));
+    }
+    
     @PostMapping(path = "/signup")
     public ResponseEntity registration(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByLogin(signUpRequest.getLogin())) {
@@ -105,6 +131,17 @@ public class AuthController {
 		return ResponseEntity.ok(UserModel.toModel(user));
 			
     }
-    
-
+    /*
+     * intern foreach
+     */
+    private List<String> getProjectRoles(ProjectRequest request){
+        List<String> roles = new ArrayList<String>();
+        for(var involve : involveRepository.findAllByUserId(request.getIdUser())) {
+            if(involve.getProject().getId()==request.getProjectId()) {
+                roles.add( involve.getRoleName());
+                involve.getRoles().forEach(role->roles.add(role.getPrivilege().getName()));
+            }
+        }
+        return roles;
+    }
 }
