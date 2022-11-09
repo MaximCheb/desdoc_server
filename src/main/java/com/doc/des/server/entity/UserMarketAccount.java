@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+@Data // use or don't use Lombok
 @Entity
 @Table(name = "market_account")
 public class UserMarketAccount {

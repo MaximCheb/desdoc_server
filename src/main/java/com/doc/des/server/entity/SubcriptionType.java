@@ -1,10 +1,14 @@
 package com.doc.des.server.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +21,12 @@ public class SubcriptionType {
 	private String name;
 	@Column(length=64, nullable=false, unique=false)
 	private String market;
+	private int teamSize;
 	private int workHour;
+	private int serverEntityCount; // eхport, game balance resource, plus of user change
+	@OneToMany(targetEntity=PromoEntity.class,mappedBy="subcription",fetch=FetchType.EAGER)   // внешний ключ
+    private List<PromoEntity> promo;
+	
 	public Long getId() {
 		return id;
 	}
@@ -41,5 +50,18 @@ public class SubcriptionType {
 	}
 	public void setWorkHour(int workHour) {
 		this.workHour = workHour;
-	}	
+	}
+    public int getTeamSize() {
+        return teamSize;
+    }
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
+    }
+    public int getServerEntityCount() {
+        return serverEntityCount;
+    }
+    public void setServerEntityCount(int serverEntityCount) {
+        this.serverEntityCount = serverEntityCount;
+    }
+	
 }
