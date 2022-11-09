@@ -16,7 +16,7 @@ public class RolesModel {
     	RolesModel model = new RolesModel();
     	model.setId(entity.getId());
     	model.setProjectId(entity.getProjectId());
-    	model.setName(entity.getName());
+    	model.setName(entity.getPrivilege().getName());
     	model.setPrivilege(entity.getPrivilege().getName());
     	model.setProjectRoleId(entity.getProjectRole().getId());
     	return model;
