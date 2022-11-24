@@ -8,13 +8,17 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 
 @JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY)
-public class ProjectFileSingleEntity {
-    public int id;
-    public int projectId;
-    public String file;
-    public String format;
-    public String file_type;
+public class ProjectFileSingleEntity extends ProjectFileEntity{
+    
     public ArrayList<ProjectFileStyle> style;
     public ArrayList<ProjectFileElements> lines;  
     
+    public void changeData(ProjectFileSingleEntity newEntity) {
+        this.fileName = newEntity.fileName;
+        this.projectId = newEntity.projectId;
+        this.id = newEntity.id;
+        this.fileName = newEntity.fileName;
+        this.format = newEntity.format;
+        this.template = newEntity.template;
+    }
 }

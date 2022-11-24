@@ -8,9 +8,10 @@ import lombok.Data;
 @JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY)
 @Data
 public class ProjectFileEntity {
-private String name;
-private Long projectId;
-private Long creatorId;
-private Date date;
-private String fileName;
+    public int id;
+    public int projectId;
+    public String fileName;
+    public String format;
+    public String fileType;
+    public String template;
 }
