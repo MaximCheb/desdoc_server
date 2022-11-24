@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.doc.des.server.doc.service.PoiService;
 import com.doc.des.server.exception.AlreadyExistException;
+import com.doc.des.server.file.entity.ProjectArchiveFilesEntity;
 import com.doc.des.server.file.entity.ProjectFileSingleEntity;
 import com.doc.des.server.request.LoginRequest;
 
@@ -32,22 +34,32 @@ public class PoiController {
 //		mongoProjectService.getAll
 //		return itemNotebooks;
 //	}
-	@GetMapping("/test")
+	
+	@GetMapping("/file")
 	@PreAuthorize("hasAuthority('manager')")
-	public ResponseEntity getOne(@RequestParam Long id) {
-		try {
-			return ResponseEntity.ok(0);
-		}catch(Exception e) {
-			return ResponseEntity.badRequest().body("Not poi");
-		}
-	}
-	@GetMapping("/simple")
-	@PreAuthorize("hasAuthority('manager')")
-	public ResponseEntity createSimple(@Valid @RequestBody ProjectFileSingleEntity simpleEntity) {
+	public ResponseEntity createFromFile(@RequestParam("file") MultipartFile inputFile) {
         try {
             return ResponseEntity.ok(0);
         }catch(Exception e) {
-            return ResponseEntity.badRequest().body("Not poi");
+            return ResponseEntity.badRequest().body("Not file");
+        }
+    }
+	@PostMapping("/archive")
+    @PreAuthorize("hasAuthority('manager')")
+    public ResponseEntity createFromArcive(@RequestParam("file") MultipartFile inputArchive) {
+        try {
+            return ResponseEntity.ok(0);
+        }catch(Exception e) {
+            return ResponseEntity.badRequest().body("Not archive");
+        }
+    }@Valid 
+	@PostMapping("/json")
+    @PreAuthorize("hasAuthority('manager')")
+    public ResponseEntity createFromJson(@RequestBody ProjectFileSingleEntity simpleEntity) {
+        try {
+            return ResponseEntity.ok(0);
+        }catch(Exception e) {
+            return ResponseEntity.badRequest().body("Not json");
         }
     }
 //	@PostMapping(path = "/new", produces = MediaType.APPLICATION_JSON_VALUE)

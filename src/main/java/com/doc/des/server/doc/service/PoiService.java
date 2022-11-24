@@ -28,8 +28,12 @@ public class PoiService {
     	return true;
     }
     
-//    private File getFileByPath(String fileName) {
-//        
-//    }
+    public boolean createPresetationByFile(ProjectFileSingleEntity inputFileEntity) throws FileNotFoundException {
+        storageFolder = Paths.get(storageLocation);
+        File file = new File("tmp.ppt");
+        InputStream fis = new FileInputStream(file);
+        XWPFDocument document = new XWPFDocument();         
+        return true;
+    }
 
 }
