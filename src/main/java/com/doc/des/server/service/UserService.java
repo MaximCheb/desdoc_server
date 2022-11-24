@@ -20,6 +20,7 @@ import com.doc.des.server.exception.AlreadyExistException;
 import com.doc.des.server.model.UserModel;
 import com.doc.des.server.repository.UserRepository;
 import com.doc.des.server.request.ChangeLoginRequest;
+import com.doc.des.server.request.ChangePass;
 import com.doc.des.server.security.JwtUtils;
 
 @Service
@@ -59,6 +60,13 @@ public class UserService {
         var user = repository.findByLogin(logins.getOldLogin());
         user.setLogin(logins.getNewLogin());
         repository.save(user);        
+    }
+
+    public void updatePass(ChangePass changePass) { // didnt test
+        var user = repository.findByLogin(changePass.getLogin());
+        user.setPassword(changePass.getPass());
+        repository.save(user);      
+        
     }
     
 
