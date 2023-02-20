@@ -1,21 +1,14 @@
-package com.doc.des.server.service;
+package com.doc.concept.server.user.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.doc.des.server.entity.ProjectInvolveEntity;
-import com.doc.des.server.entity.RolesEntity;
-import com.doc.des.server.entity.UserEntity;
-import com.doc.des.server.repository.ProjectInvolveRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements UserDetails {
@@ -42,10 +35,10 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(UserEntity user) {
+	public static UserDetailsImpl build(User user) {
 	    Set<String>privilages = new HashSet<String>();
 	    privilages.add("user"); // users role
-	    user.getSubscription().forEach(sub->privilages.add(sub.getRole())); 
+	    user.getSubscriptions().forEach(sub->privilages.add(sub.getRole()));
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();		
 		for (var privilage : privilages) {
 			authorities.add(new SimpleGrantedAuthority(privilage.toString()));			
