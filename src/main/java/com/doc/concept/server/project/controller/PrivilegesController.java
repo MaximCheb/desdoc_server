@@ -1,20 +1,21 @@
-package com.doc.des.server.controller;
+package com.doc.concept.server.project.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.doc.concept.server.project.model.Privilege;
+import com.doc.concept.server.project.service.PrivilegeService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.doc.des.server.service.PrivilegeService;
+import javax.management.InstanceAlreadyExistsException;
 
+@Getter
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/privileges")
 public class PrivilegesController {
-    @Autowired
-    private PrivilegeService privilegesService;
+    final private PrivilegeService privilegesService;
     
     @GetMapping("/all")
     public ResponseEntity getAllPrivileges() {
@@ -24,7 +25,6 @@ public class PrivilegesController {
             return ResponseEntity.badRequest().body("Empty");
         }
     }
-    
     @GetMapping("/name/{name}")
     public ResponseEntity getByName(@PathVariable String name) {
         try {
@@ -33,14 +33,20 @@ public class PrivilegesController {
             return ResponseEntity.badRequest().body("No privilege by name");
         }
     }
-    
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable int id) {
-        privilegesService.getAll();
-        try {          
+        try {
             return ResponseEntity.ok(privilegesService.getOne(id));
         }catch(Exception e) {
             return ResponseEntity.badRequest().body("No privilege by id");
+        }
+    }
+    @PostMapping("/create")
+    public ResponseEntity create(Privilege privilege){
+        try {
+           return ResponseEntity.ok(privilegesService.create(privilege));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
