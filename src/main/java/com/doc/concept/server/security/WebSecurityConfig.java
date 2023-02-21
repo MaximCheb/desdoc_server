@@ -1,5 +1,8 @@
-package com.doc.des.server.security;
+package com.doc.concept.server.security;
 
+import com.doc.concept.server.user.service.AuthService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.doc.des.server.service.AuthService;
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -22,11 +24,8 @@ import com.doc.des.server.service.AuthService;
 		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private AuthService userDetailsService;
-	
-	@Autowired
-	private AuthEntryPointJwt unauthorizedHandler;
+	final private AuthService userDetailsService;
+	final private AuthEntryPointJwt unauthorizedHandler;
 	
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -35,7 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder())
+				.and().inMemoryAuthentication()
+				.withUser("gcc-user-api")
+				.password(passwordEncoder().encode("password"))
+				.authorities("user");
 	}
 
 	@Bean
@@ -55,7 +58,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests().antMatchers("/auth/**").permitAll()
-			.antMatchers("/mongo/**").permitAll()
+			.antMatchers("/api-docs/**").permitAll()
+			.antMatchers("/swagger-ui.html").permitAll()
+			.antMatchers("/swagger-ui/**").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
