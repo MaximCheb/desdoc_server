@@ -1,4 +1,4 @@
-package com.doc.des.server.entity;
+package com.doc.concept.server.user.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
-@Data // use or don't use Lombok
+@Data
 @Entity
 @Table(name = "market_account")
 public class UserMarketAccount {
@@ -19,7 +19,7 @@ public class UserMarketAccount {
 	private Long id;
 	@ManyToOne
     @JoinColumn(name="user_id", nullable=false)
-	private UserEntity user;
+	private User user;
 	@Column(length=64, nullable=false, unique=false)
     private String market;
 	@Column(length=64, nullable=false, unique=false)
