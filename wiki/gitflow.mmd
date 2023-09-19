@@ -5,22 +5,28 @@ gitGraph
         checkout main
         commit tag:"001"
         commit tag:"002"
-        branch release003
-        checkout release003
+        branch release-003
+        checkout release-003
         commit tag:"featureB"
         commit tag:"featureA"
         checkout main
-        branch featureC
+        branch hotfix/001
+        checkout hotfix/001
+        commit
+        commit
+        checkout main
+        merge hotfix/001 tag:"hotfix 001"
+        branch feature_C
         commit
         commit
         checkout develop
-        merge featureC
-        checkout featureC
+        merge feature_C
+        checkout feature_C
         commit tag:"fix bug"
         checkout develop
-        merge featureC
-        checkout featureC
-        checkout release003
-        merge featureC
+        merge feature_C
+        checkout feature_C
+        checkout release-003
+        merge feature_C
         checkout main
-        merge release003 tag:"003"
+        merge release-003 tag:"003"
